@@ -1,0 +1,86 @@
+/*
+Create a ministore system that computes every customers item bought from the store can also provide discounts depends on the incentives they have: Senior Card, PWD Card, Membership Options
+*/
+#include <iostream>
+#include <string>
+using namespace std;
+struct Item{
+    string itemName;
+    double itemPrice;
+};
+// Calculate total amount with discount
+double calculatesTotalvalue(Item items[], int itemCount, bool hasSeniorCard, bool hasPWDCard, bool hasMembershipCard){
+    double total = 0;
+
+    // calculate total without discounts
+    for (int i = 0; i < itemCount; ++i){
+        total  += items[i].itemPrice;
+    }
+    // Apply discounts based on incentives
+    if (hasSeniorCard){
+        total *= 0.9; // 10% discount for Senior Citizen Card
+    }
+    if (hasPWDCard){
+        total *= 0.8; // 20% discount for PWD Card
+    }
+    if (hasMembershipCard){
+        total *= 0.85; // 15% discount for Membership Card
+    }
+    return total;
+}
+void InputItems(Item items[], int& itemCount) {
+    char addMore;
+
+do {
+    cout << "\nEnter Item " << itemCount + 1 << " Name: ";
+    cin >> items[itemCount].itemName;
+
+    cout << "Enter Item " << itemCount + 1 << " Price: ";
+    cin >> items[itemCount].itemPrice;
+
+    itemCount++;
+    cout << " Do you want to add more items? (Y/N): ";
+    cin >> addMore;
+    }while (addMore == 'Y' || addMore == 'y');
+}
+void InputIncentives(bool& hasSeniorCard, bool& hasPWDCard, bool& hasMembershipCard){
+    cout << "Do you have a Senior Card? (1 for Yes, 0 for No): ";
+    cin >> hasSeniorCard;
+
+    cout << "Do you have a PWD Card? (1 for Yes, 0 for No): ";
+    cin >> hasPWDCard;
+
+    cout << "Do you have a Membership Card? (1 for Yes, 0 for No): ";
+    cin >> hasMembershipCard;
+}
+// Function to display receipt
+void DisplayReceipt(Item items[], int itemCount, double totalAmount){
+    cout << "\n --- Receipt ---" << endl;
+    for (int i = 0; i <  itemCount; ++i) {
+        cout << items[i].itemName << ": $" << items[i].itemPrice  << endl;
+    }
+
+    cout << "Total Amount: $" << totalAmount << endl;
+}
+int main(){
+    cout << "welcome to the Ministore!! \n";
+
+    // Call fucntion to input items
+    int itemCount = 0;
+    const int MAX_ITEMS = 100;
+    Item items[MAX_ITEMS];
+    InputItems(items, itemCount);
+    
+    // checking for incentives
+    bool hasSeniorCard, hasPWDCard, hasMembershipCard;
+    InputIncentives(hasSeniorCard, hasPWDCard, hasMembershipCard);
+
+    // Calculate total amount with discounts
+    double totalAmount = calculatesTotalvalue(items, itemCount, hasSeniorCard, hasPWDCard, hasMembershipCard);
+    
+    // Call function to display receipt
+    DisplayReceipt(items, itemCount, totalAmount);
+    
+    return 0;
+
+}
